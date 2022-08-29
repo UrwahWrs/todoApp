@@ -33,37 +33,8 @@ todoForm.addEventListener("submit", function (e) {
 });
 
 //saving task info in local storage
-//save task info
-const coll = document.querySelector(".collapse");
 
-coll.addEventListener("submit", function (e) {
- 
 
-  e.preventDefault();
-  const input1 = this.notec;
-  const input2 = this.dat;
-  const input3 = this.sel;
-  const inote = input1.value;
-  const idate=input2.value;
-  const ipri=input3.value;
-
-  if (inote!= ""||idate!=""||ipri!="") {
-    const task = {
-      id: new Date().getTime(),
-      note: inote,
-      date: idate,
-      priority: ipri
-     
-    };
-
-    
-
-    taskInfo.push(taskInfo);
-    localStorage.setItem("localData", JSON.stringify(taskInfo));
-    coll.reset();
-  }
-  
-});
 
 
 // remove task
@@ -138,11 +109,7 @@ function createTask(task) {
   todoList.appendChild(taskEl);
   countTasks();
 }
-function scheduleTask(taskId){
-  let task= tasks.filter((task) => task.id === parseInt(taskId));
-  task = task[0]
-  let col_id = `#${task.id}-col`
-}
+
 
 // remove task
 function removeTask(taskId) {
