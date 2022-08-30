@@ -11,17 +11,23 @@ if (localStorage.getItem("tasks")) {
   });
 }
 
+
+
 // submit form
 todoForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const input = this.name;
   const inputValue = input.value;
 
+  
+
+
   if (inputValue != "") {
     const task = {
       id: new Date().getTime(),
       name: inputValue,
-      isCompleted: false
+      isCompleted: false, 
+
     };
 
     tasks.push(task);
@@ -31,9 +37,6 @@ todoForm.addEventListener("submit", function (e) {
   }
   input.focus();
 });
-
-//saving task info in local storage
-
 
 
 
@@ -83,14 +86,15 @@ function createTask(task) {
 <div class="collwin">
   <div class="col-md-6">
     <li>Notes </li>
-    <input name="notec" id="colnote" type="text">
+    <input name="notec" id="${task.id}-note" type="text">
   </div>
   <div class="col-md-6">
-    <input name="dat" id="coldate" type="date">
+    <input name="dat" id="${task.id}-coldate" type="date">
     <br>
     <div class="form-group">
       <li id="pri">Priority</li>
-      <select name="sel" class="form-control" id="sel1">
+      <select name="sel" class="form-control" id="${task.id}-sel1">
+      <span>${task.pri}</span>
         <option>None</option>
         <option>Low</option>
         <option>Medium</option>
@@ -104,10 +108,10 @@ function createTask(task) {
 </div>
 </div>
   `;
-  
   taskEl.innerHTML = taskElMarkup;
   todoList.appendChild(taskEl);
   countTasks();
+  
 }
 
 
@@ -115,10 +119,12 @@ function createTask(task) {
 function removeTask(taskId) {
   tasks = tasks.filter((task) => task.id !== parseInt(taskId));
   localStorage.setItem("tasks", JSON.stringify(tasks));
-  debugger
   document.getElementById(taskId).remove();
   countTasks();
 }
+
+
+
 
 // update task
 function updateTask(taskId, el) {
@@ -126,7 +132,7 @@ function updateTask(taskId, el) {
 
   if (el.hasAttribute("contenteditable")) {
     task.name = el.textContent;
-  } else {
+  } else if(el.type == 'checkbox'){
     const span = el.nextElementSibling.nextElementSibling;
     task.isCompleted = !task.isCompleted;
     if (task.isCompleted) {
@@ -136,12 +142,12 @@ function updateTask(taskId, el) {
       el.removeAttribute("checked");
       span.setAttribute("contenteditable", "");
     }
+  } else {
+    task.taskInfo = updateTaskInfo(task);
   }
   localStorage.setItem("tasks", JSON.stringify(tasks));
   countTasks();
 }
-
-let taskInfo = JSON.parse(localStorage.getItem("localData")) || [];
 
 function countTasks() {
 
@@ -150,3 +156,19 @@ function countTasks() {
 
 }
 
+function updateTaskInfo(task){
+
+  const inote = document.getElementById(`${task.id}-note`);
+  const inputNote= inote.value;
+  const idat=document.getElementById(`${task.id}-coldate`);
+  const inputDate= idat.value;
+  const ipri=document.getElementById(`${task.id}-sel1`);
+  const inputPri= ipri.value;
+  let taskI = {};
+
+  if (inote != "" && idat !="" && ipri !="") {
+    taskI = { notec: inputNote, dat: inputDate, pri: inputPri}; 
+    
+  }
+  return taskI;
+}
